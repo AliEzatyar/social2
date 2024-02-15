@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookmarks | {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %} ">
+    {% block head %}{% endblock %}
+    <style>
+        body{
+            zoom: 100%;
+        }
+    </style>
+</head>
+
+<body>
+<div id='header'>
+    <span style="margin-top: 13px;color: black;font-style: italic;font-family: 'Microsoft New Tai Lue'" class="logo">Bookmarks</span>
+    {% if request.user.is_authenticated %}
+        <ul class='menu' style="margin-top: 25px">
+            <li  {% if section == 'dashboard' %} class='selected'{% endif %}>
+                <a href="{% url 'a_ccount:dashboard_view' %}">My Dashboard</a>
+            </li>
+            <li  {% if section == 'images' %} class="selected" {% endif %}>
+                <a href="{% url 'images:images_list' %}">Images</a>
+            </li>
+            <li  {% if section == 'People' %} class='selected'{% endif %}>
+                <a href="{% url 'a_ccount:users' %}">People</a>
+            </li>
+        </ul>
+    {% endif %}
+    <span class='user'>
+{% if request.user.is_authenticated %}
+    <p>Hello {{ request.user.first_name|default:request.user.username }} | <a href="{% url 'a_ccount:logout_view' %}">Log Out</a></p>
+{% else %}
+    <p><a href="{% url 'a_ccount:login_view' %}">Log In</a></p>
+{% endif %}
+</span>
+</div>
+
+<!--for showing messages in every pages extending this base template-->
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            this are message.tags : {{ message }}
+            <li class="{{ message.tags }}">
+                {{ message|safe }}
+                <a href="#" class="close">X</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<div id="content">
+    <div style="margin-left: 100px">
+    {% block content %}{% endblock %}</div>
+</div>
+<!-- for like button  AJAX feature-->
+<script src="{% static "js/cookie_manager.js" %}"></script> <!-- creates a token-->
+<script>
+    const token = Cookies.get("csrftoken"); // this comes from the online token file
+    document.addEventListener("DOMContentLoaded", function(e){
+        {% block domready %}
+        {% endblock %}
+    })
+</script>
+</body>
+</html>

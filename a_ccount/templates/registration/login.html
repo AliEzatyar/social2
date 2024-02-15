@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load social_tags %}
+{% load static %}
+{% block title %}Log-in{% endblock %}
+{% block head %}
+    <style>
+        .center {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%)
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    {#    <h1>{{ protocol }}://{{ domain }}</h1>#}
+    {% if form.errors %}
+        <p>Username or password did not match</p>
+    {% else %}
+        <h1 style="text-align:center">Log-in</h1>
+    {% endif %}
+
+    <form class="center" method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+        {#        <input type="<<<hi></hi></hi></hi>dden" name="next" value="fffffffffff">#}
+        <p><input type="submit" value="Login"></p>
+
+    </form>
+    {#    <h4 style="top: 65%;left:40%;position: fixed"><a href="https://www.mysite.com:8080/accounts/github/login/?process=login">Login with gitHub</a></h4>#}
+    {#    <h4 style="top: 60%;left:40%;position: fixed"><a href="{% provider_login_url 'facebook' %}">Login via Facebook</a></h4>#}
+    {#    <h4 style="top: 65%;left:40%;position: fixed"><a href="{% provider_login_url 'github' %}">Login Via GitHub</a></h4>#}
+    <div class="social">
+        <ul>
+            <li class="facebook">
+                <a href="{% provider_login_url 'facebook' %}">Sign in using Facbeook!</a>
+            </li>
+            <li class="google">
+                <a href="{% provider_login_url 'google' %}">Sign in using GOOGLE!</a>
+            </li>
+            <li class="twitter">
+                <a href="{% provider_login_url 'github' %}">Sign in using GitHub!</a>
+            </li>
+        </ul>
+    </div>
+    <h4 style="top: 70%;left:40%;position: fixed">
+        <a href="{% url 'a_ccount:password_reset_form' %}"> Forget or wanna hack?</a> <br>
+        Don't have an account? <a href="{% url 'a_ccount:register' %}"> Create here</a>
+    </h4>
+{#    <img src="{% static 'b129.jpg' %}" alt='klsdjf'>#}
+{% endblock %}

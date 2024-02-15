@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block head %}
+    <style>
+        #list_people .usser img{
+            border: 4px dotted #1b6d32;
+        }
+        #list_people .usser {
+            width: 180px;
+            float: left;
+            overflow: auto;
+            padding: 10px;
+        }
+        #list_people img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            margin-bottom: 40px;
+        }
+        #list_people .information {
+            text-align: center;
+
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <h1 style="color: black">People you may know</h1>
+    <div id="list_people">
+        {% for person in users %}
+            {% if person.profile.image %}
+                <div class="usser">
+                    <a href="{% url 'a_ccount:user_details' person.username %}">
+                        <img src="{{ person.profile.image.url }}" alt="{{ person.profile.image.url }}">
+                    </a>
+                    <div class="information">
+                        <a href="{% url 'a_ccount:user_details' person.username %}">
+                            {{ person.first_name|default:person.username }}
+                        </a>
+                        aaaaa
+                    </div>
+                </div>
+            {% endif %}
+
+        {% endfor %}
+    </div>
+{% endblock %}

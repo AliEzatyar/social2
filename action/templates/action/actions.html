@@ -1,0 +1,64 @@
+{#{% extends 'base.html' %}#}
+{% load thumbnail %}
+{% block head %}
+    <style>
+
+
+        #action img {
+            border-radius: 25px;
+        }
+
+        #profile {
+            border-radius: 50%;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <!--user profile and actions image if exists-->
+    <div id="action">
+        <div style="display: flex">
+            {% with user=action.user profile=action.user.profile %}
+                {% if profile.image %}
+                    {% thumbnail profile.image 80x80 crop="100%" as im %}
+                    {#            <a href="{% url 'a_ccount:user_details' user.username %}">#}
+                    <a href="{{ user.get_absolute_url }}"> <!-- since we have userd url_ovverid in settings-->
+                        <img id="profile" src="{{ im.url }}" alt="{{ user.username }}">
+                    </a>
+
+                {% endif %}
+                {% if action.target_model_object %}
+                    {% with target_model_object=action.target_model_object %}
+                        {% if target_model_object.image %}
+                            {% thumbnail target_model_object.image 80x80 crop="100%" as im %}
+                            <a>
+                                <img style="margin-left: 10px" src="{{ im.url }}" alt="{{ target_model_object }}">
+                            </a>
+                        {% endif %}
+                        {% if target_model_object.profile.image %}
+                            {% thumbnail target_model_object.profile.image 80x80 crop="100%" as im %}
+                            <a>
+                                <img style="margin-left: 10px" src="{{ im.url }}" alt="{{ target_model_object }}">
+                            </a>
+                        {% endif %}
+                    {% endwith %}
+                {% endif %}
+            {% endwith %}
+            <div style="display: flex;flex-direction: column; margin-top: 30px;margin-left: 10px">
+                <div style="font-style: italic;color:#ccc">
+                    {{ action.created|timesince }} ago
+                </div>
+                <div>
+                    <a href="{% url 'a_ccount:user_details' action.user.username %}">
+                        {{ action.user.username }}
+                    </a>
+                    {{ action.verb }}
+                    {% if action.target_model_object %}
+                        <a href="{{ action.target_model_object.get_absolute_url }}">
+                            {{ action.target_model_object }}
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

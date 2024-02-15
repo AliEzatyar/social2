@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load social_tags %}
+{% load thumbnail %}
+{% block domready %}
+{#        <script>#}
+{#    taking out cookies#}
+    console.log("-----------------------------------")
+    function getCookies(){
+        console.log(document.cookie)
+    }
+    getCookies();
+    console.log("-----------------------------------")
+
+    a = document.getElementById("follow")
+    a.addEventListener("click",function (e) {
+    e.preventDefault()
+    var follow_button = this;
+    var current_action = follow_button.dataset.action;
+    var form = new FormData()
+    var options = {
+    method: "POST",
+    headers: {"X-CSRFToken": token},
+    mode: 'same-origin',
+    }
+    console.log("action:"+follow_button.dataset.action)
+    console.log("id:"+String(follow_button.dataset.id))
+    form.append('action',follow_button.dataset.action)
+    form.append('fd_user_id',follow_button.dataset.id)
+    console.log(form)
+    options['body'] = form; // here we should create body attribute not  'form' attrbute
+    console.log(options);
+    fetch('http://127.0.0.1:8000/a_ccount/follow/',options).
+    then(response=> response.json()).
+    then(jsonn => {
+    if (jsonn['status'] == "ok"){
+    {#                follow_button.dataset.action = current_action = "follow"? "Unfollow":"follow";#}
+    if  (current_action === "follow"){
+    follow_button.dataset.action = "Unfollow";
+    follow_button.innerText = "Unfollow";
+    {#                    window.alert(follow_button.innerHtml)#}
+    {#                    console.log("being+added"+document.getElementById('amount_followers').innerHtml)#}
+
+    amount_followers = document.getElementById('amount_followers');
+    amount = parseInt(amount_followers.innerText);
+    amount_followers.innerText = amount + 1;
+    }
+    else{
+    follow_button.dataset.action = "follow";
+    follow_button.innerText = "follow";
+    amount_followers = document.getElementById('amount_followers');
+    amount = parseInt(amount_followers.innerText);
+    {#                    window.alert(amount)#}
+    amount_followers.innerText = amount - 1;
+    {#                    window.alert(amount_followers.innerHtml);#}
+    }
+    console.log(follow_button.dataset);
+    }
+    else{
+    console.log("it was somethings else");
+    console.log(text);
+    }})
+    })
+    {#    </script>#}
+{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/user_details.css'%}">
+{% endblock %}
+{% block content %}
+    <!-- user name-->
+    <h1>{{ user.first_name|default:user.username }}</h1>
+    <!-- user details-->
+    <div id="details">
+        <span>
+            <img class="user_pic" src="{{ user.profile.image.url }}" alt="{{ user.get_full_name }}">
+        </span>
+        <!--follwers amount-->
+        {% with user.followers_relations.values_list.count as followers %}
+            <span class="f_ammount">
+                <span id="amount_followers">{{ followers }}</span> follower{{ followers|pluralize }}
+            </span>
+        {% endwith %}
+        <span class="follow">
+            <a href="#" data-action="{% if request.user|is_followers:user %}Un{% endif %}follow" data-id="{{ user.id }}"
+               id="follow">
+                {% if request.user|is_followers:user %}Un{% endif %}follow
+            </a>
+        </span>
+        <!-- images posted-->
+        <div id="image-listt" class="posts">
+{#            {% include 'images/image/pics_list.html' with images=user.images_of_user.values %}#}
+             {% include 'images/image/pics_list.html' with images=user.images_of_user.all %}
+
+        </div>
+
+    </div>
+
+{% endblock %}

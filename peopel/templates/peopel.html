@@ -1,0 +1,6 @@
+<form method="post">
+    <h1>This is the form {{ form.data }}</h1>
+    {{ form.as_p }}
+    {% csrf_token %}
+    <input type="submit" value="submit">
+</form>

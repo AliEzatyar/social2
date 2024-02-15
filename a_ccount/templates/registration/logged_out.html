@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block title %}Logged out{% endblock %}
+{% block content %}
+    <h1>You have logged out of Bookmarks</h1>
+    <p style="text-align: center"><a href="{% url 'a_ccount:login_view' %}">Click here to log-in again</a></p>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Registration_domne{% endblock %}
+{% block head %}
+    <style>
+        .center {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="center">
+        <h1>Regeistration Was Successful</h1>
+        <p>The user {{ user.first_name }} with user name {{ user.username }} was successfully created.</p>
+        <p><a href="{% url 'a_ccount:login_view' %}">You can login</a></p>
+    </div>
+{% endblock %}

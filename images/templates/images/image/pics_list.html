@@ -1,0 +1,25 @@
+{% load thumbnail %}
+{#{% load images_tags %}#}
+{% for image in images %}
+    <div style="float:left;
+    width:220px;
+    height:300px;
+    margin:10px 10px 10px 10px;
+    border-top:10px solid #12c064;
+    background: #ffffff;
+    margin-bottom: 40px;
+">
+        {#        {{ image.image }}#}
+        {% thumbnail image.image 220x200 crop="smart" as fixed_image %}
+        {#    <a href="{% url 'images:detail' image.id image.slug %}">#}
+        <a href="{{ image.get_absolute_url }}"> <!-- better way -->
+            {#            <img src="media/{{ fixed_image|forward_slashes }} " alt="Error">#}
+            <img src="{{ fixed_image.url }}" alt="Error">
+        </a>
+        <div style="padding:10px;">
+            <a style="padding: 10px" href="{{ image.get_absolute_url }}">
+                {{ image.title }}
+            </a>
+        </div>
+    </div>
+{% endfor %}

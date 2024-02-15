@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}images{% endblock %}
+{% block domready %}
+{#        <script>#}
+
+    console.log(window.pageYOffset)
+    console.log(window.pageXOffset)
+    console.log(window.innerHeight)
+    console.log(document.body.clientHeight)
+    var yoffset = 0
+    var page = 1;
+    var empty_page = false
+
+    window.addEventListener("scroll", function (e) {
+    console.log("------------------------------------------------------")
+    console.log("scroll distance " + window.pageYOffset)
+    console.log("clientDistance " + document.body.clientHeight)
+    console.log("innerHeght " + window.innerHeight)
+    console.log(window.innerHeight - document.body.clientHeight)
+    console.log(window.pageYOffset-yoffset +"difference")
+    if (Math.abs(window.pageYOffset - yoffset) > 200) {
+    page += 1;
+    yoffset = window.pageYOffset;
+    console.log("its ")
+    fetch("?images_only=1&page=" + page)
+    .then(response => response.text()).then(html => {
+    if (html === "") {
+        empty_page = true
+{#        window.alert("emptypage")#}
+    } else {
+    {#window.alert(html)#}
+    var img_list = document.getElementById("listi");
+{#    window.alert(String(img_list)+"listi")#}
+    img_list.insertAdjacentHTML("beforeEnd", html);
+    }
+    })
+
+    }
+    })
+ddddddd
+ooooooooooooooooooo
+{% endblock %}
+{% block content %}
+    <h1> Images bookmarked </h1>
+    <div id="listi">
+        {% include 'images/image/pics_list.html' %}
+    </div>
+{% endblock %}

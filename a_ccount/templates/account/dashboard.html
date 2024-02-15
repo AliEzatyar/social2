@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+
+    <script>
+        window.alert('welcome dear {{ loggedUser.first_name|default:loggedUser.username|safe }}');
+    </script>
+    {#    <script>#}
+    {#function launcher() {#}
+    {#    window.alert(window.bookmarklet_js)#}
+    {#    if (!window.bookmarklet) {#}
+    {#        bookmarklet_js = document.body.appendChild(document.createElement('script'));#}
+    {#        bookmarklet_js.src = '//127.0.0.1:8000/static/js/bookmarklet.js?r=' + Math.floor(Math.random() * 9999999999999999);#}
+    {#        window.bookmarklet = true;#}
+    {#    } else {#}
+    {#        bookmarkletLaunch();#}
+    {#    }#}
+
+    {#</script>#}
+{% endblock %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+    {#    <p id="user" style="display: none">{{ loggedUser.first_name|default:loggedUser.username }}</p>#}
+
+    <h1>Welcome To Your Dashboard Dear '{{ loggedUser.first_name|default:loggedUser.username }}'</h1>
+    <a href="javascript:window.alert(); function launcher() {
+                window.alert(window.bookmarklet_js);
+                if (!window.bookmarklet) {bookmarklet_js = document.body.appendChild(document.createElement('script'));
+                    bookmarklet_js.src = '//www.mysite.com:8080/static/js/bookmarklet.js?r=' + Math.floor(Math.random() * 9999999999999999);
+                    window.bookmarklet = true;
+                                    }
+                else {
+                    bookmarkletLaunch();
+                }
+                } launcher(); "class="button" style="float: right">Pin Bookmark</a>
+    {% with total_bookmarked=request.user.images_of_user.count %}
+        <h2>You have bookmarked {{ total_bookmarked }} image{{ total_bookmarked|pluralize }}</h2>
+    {% endwith %}
+
+        {#        from other websites <button type="button" onclick="vsd()" class="button">Bookmark it</button>#}
+    <h2 style="font-family: 'Microsoft New Tai Lue';background-color: #00a74f;color: black">What is going on...</h2>
+    {% if actions %}
+    {% for action in actions %}
+            {% include 'action/actions.html' %}
+<br>
+
+    {% endfor %}
+    {% else %}
+        <h3 style="color: #b44092">No Actions Yet!</h3>
+    {% endif %}
+    <h2>Other actions available</h2>
+    <ul>
+        <li><a href="{% url "a_ccount:edit_user" %}">Edit your profile</a></li>
+        <li><a href="{% url "a_ccount:password_change" %}">Change your password</a></li>
+    </ul>
+{% endblock %}
