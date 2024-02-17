@@ -4,14 +4,13 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
-
 # Create your models here.
 from a_ccount.models import Relation
 
 
 class Action(models.Model):
-    f="ggggggggggggggggggggggg"
-    f="iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"
+    f = "ggggggggggggggggggggggg"
+    f = "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"
     user = models.ForeignKey('auth.User',
                              related_name='actions',
                              on_delete=models.CASCADE)
@@ -28,9 +27,9 @@ class Action(models.Model):
     target_model_object = GenericForeignKey('target_ct', 'target_id')
 
     class Meta:
-
         indexes = [
             models.Index(fields=['-created']),
             models.Index(fields=['target_ct', 'target_id']),
         ]
+
     ordering = ['-created']
