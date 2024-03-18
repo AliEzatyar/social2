@@ -1,5 +1,5 @@
 from django.urls import path
-from images.views import create_image,show_detail,like,show_images
+from images.views import create_image,show_detail,like,show_images,add_images
 # from .views import bookmarkit_js
 app_name = "images"
 urlpatterns = [
@@ -7,5 +7,6 @@ urlpatterns = [
     path("detail/<int:id>/<slug:slug>",show_detail,name="detail"),
     path("like/",like,name="like"),
     path("",show_images,name="images_list"),
+    path("unlike/",add_images,name="add_images"),
     # path("bookmarklet/", bookmarkit_js, name="bookmarkit_func")
 ]

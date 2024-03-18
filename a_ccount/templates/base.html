@@ -58,7 +58,7 @@
 <!-- for like button  AJAX feature-->
 <script src="{% static "js/cookie_manager.js" %}"></script> <!-- creates a token-->
 <script>
-    const token = Cookies.get("csrftoken"); // this comes from the online token file
+    const token = Cookies.get("csrftoken");
     document.addEventListener("DOMContentLoaded", function(e){
         {% block domready %}
         {% endblock %}

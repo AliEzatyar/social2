@@ -1,8 +1,19 @@
+<!--
+    the strategy:
+        we have defined a helper counter which is initially 0 and then for each time of condition becoming true,
+            it is updated to the current y scroll distance
+        we are calculating the scroll y distance and if distance became more than 200
+        an page number is increamented by 1,
+        200 is the unit for this webpage which is taken from the height of each image, it could differ
+-->
 {% extends 'base.html' %}
 {% block title %}images{% endblock %}
 {% block domready %}
 {#        <script>#}
-
+    <!--pageYOffset is for distance between scroll's top and scrollbar's top; x the same...-->
+    <!--we have put the scroll event on window, nothing else-->
+    <!--we also calculate the distance of y by window.pageYOffset-->
+    <!--we never convert an ajax html response to json-->
     console.log(window.pageYOffset)
     console.log(window.pageXOffset)
     console.log(window.innerHeight)
@@ -17,7 +28,7 @@
     console.log("clientDistance " + document.body.clientHeight)
     console.log("innerHeght " + window.innerHeight)
     console.log(window.innerHeight - document.body.clientHeight)
-    console.log(window.pageYOffset-yoffset +"difference")
+    console.log(window.pageYOffset-yoffset +" --difference")
     if (Math.abs(window.pageYOffset - yoffset) > 200) {
     page += 1;
     yoffset = window.pageYOffset;
@@ -27,7 +38,8 @@
     if (html === "") {
         empty_page = true
 {#        window.alert("emptypage")#}
-    } else {
+    }
+    else {
     {#window.alert(html)#}
     var img_list = document.getElementById("listi");
 {#    window.alert(String(img_list)+"listi")#}
@@ -37,8 +49,6 @@
 
     }
     })
-ddddddd
-ooooooooooooooooooo
 {% endblock %}
 {% block content %}
     <h1> Images bookmarked </h1>

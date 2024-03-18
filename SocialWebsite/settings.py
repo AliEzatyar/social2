@@ -55,6 +55,7 @@ ACCOUNT_EMAIL_VERIFICATION = "none"
 INSTALLED_APPS = [
     # 'a_ccount.apps.AppConfig',
     # "oauth2_provider",
+    'debug_toolbar',
     'action.apps.ActionConfig',
     'peopel.apps.PeopelConfig',
     "images.apps.ImageConfig",
@@ -79,6 +80,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -204,7 +206,11 @@ EMAIL_USE_TLS = True
 SITE_ID = 8  # https://www.mystite.com:8080/a_ccount/
 # from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 
+INTERNAL_IPS = [
+    '127.0.0.2',
+]
 if DEBUG:
     import mimetypes
     mimetypes.add_type('application/javascript', '.js', True)
     mimetypes.add_type('text/css', '.css', True)
+

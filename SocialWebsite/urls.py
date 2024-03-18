@@ -27,7 +27,8 @@ urlpatterns = [
     # path('social-auth/', include("oauth2_provider.urls", namespace="social")),
     path("accounts/", include("allauth.urls")),
     path("images/", include("images.urls", namespace="images")),
-    path("people/", include("peopel.urls", namespace="peopel"))
+    path("people/", include("peopel.urls", namespace="peopel")),
+    path("__debug__/",include("debug_toolbar.urls")),
 ]
 if settings.DEBUG:  # if we have set DEBUG==True
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

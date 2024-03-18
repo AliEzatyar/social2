@@ -2,8 +2,6 @@
 {% load thumbnail %}
 {% block head %}
     <style>
-
-
         #action img {
             border-radius: 25px;
         }
@@ -27,17 +25,17 @@
 
                 {% endif %}
                 {% if action.target_model_object %}
-                    {% with target_model_object=action.target_model_object %}
-                        {% if target_model_object.image %}
-                            {% thumbnail target_model_object.image 80x80 crop="100%" as im %}
+                    {% with tar_obj=action.target_model_object %}
+                        {% if tar_obj.image %}
+                            {% thumbnail tar_obj.image 80x80 crop="100%" as im %}
                             <a>
-                                <img style="margin-left: 10px" src="{{ im.url }}" alt="{{ target_model_object }}">
+                                <img style="margin-left: 10px" src="{{ im.url }}" alt="{{ tar_obj }}">
                             </a>
                         {% endif %}
-                        {% if target_model_object.profile.image %}
-                            {% thumbnail target_model_object.profile.image 80x80 crop="100%" as im %}
+                        {% if tar_obj.profile.image %}
+                            {% thumbnail tar_object.profile.image 80x80 crop="100%" as im %}
                             <a>
-                                <img style="margin-left: 10px" src="{{ im.url }}" alt="{{ target_model_object }}">
+                                <img style="margin-left: 10px" src="{{ im.url }}" alt="{{ tar_obj }}">
                             </a>
                         {% endif %}
                     {% endwith %}

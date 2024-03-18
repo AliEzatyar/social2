@@ -2,6 +2,8 @@ from django import template
 
 register = template.Library()
 
+
+
 @register.filter("forward_slashes")
 def forwarder(url):
     url = str(url)

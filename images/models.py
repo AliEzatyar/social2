@@ -15,12 +15,15 @@ class Image(models.Model):
     slug = models.SlugField(max_length=200) # in its form, we used slugify to create automatic slug
     description = models.TextField(blank=True)
     users_liked = models.ManyToManyField(AUTH_USER_MODEL, related_name='liked_images')
+    # for ordering, couning the amount of users who have liked is an expensive process
+    total_likes = models.PositiveIntegerField(default=0)
 
     class Meta:
         indexes = [
-            models.Index(fields=['-created'])
+            models.Index(fields=['-created']),
+            models.Index(fields=['-total_likes'])
         ]
-        ordering = ['-created']
+        ordering = ['-total_likes']
 
     def __str__(self):
         return f"Image caught by {self.user.first_name}."

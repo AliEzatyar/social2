@@ -25,8 +25,8 @@ def create_image(request):
             user = request.user
             Imagee.user = user
             Imagee.save()
-            create_action(request.user,'Bookmarked an image',Imagee)
-            messages.success(request, "Image save successfully!")
+            create_action(request.user, 'Bookmarked an image', Imagee)
+            messages.success(request, "Image saved successfully!")
             return redirect(Imagee.get_absolute_url())
     else:
         form = ImageForm(request.GET)
@@ -50,35 +50,47 @@ def show_detail(request, id, slug):
 @login_required
 @require_POST
 def like(request):
-    image_id = request.POST.get('id')
-    action = request.POST.get('action')
-    if action and image_id:
-        try:
-            image = get_object_or_404(Image, id=image_id)
-            if action == "like":
-                image.users_liked.add(request.user)
-                create_action(request.user,'Liked an image',image)
-                return JsonResponse({'status': "ok"})
-            else:
-                image.users_liked.remove(request.user)
-                create_action(request.user,'Disliked an image')
-                return JsonResponse({'status': "ok"})
-        except Image.DoesNotExist:
-            pass
-    return JsonResponse({"status": "failed"})
+    if 'special_action' in request.POST:
+        print("add user requested")
+        print("Data",request.POST)
+        return render(request, 'images/image/add_liked_user.html', {'user': request.user})
+    else:
+        image_id = request.POST.get('id')
+        action = request.POST.get('action')
+        if action and image_id:
+            try:
+                image = get_object_or_404(Image, id=image_id)
+                if action == "like":
+                    image.users_liked.add(request.user)
+                    image.total_likes += 1
+                    image.save()
 
+                    create_action(request.user, 'Liked an image', image)
+                    return JsonResponse({'status': "ok"})
+                else:
+                    image.users_liked.remove(request.user)
+                    image.total_likes -= 1
+                    image.save()
+                    create_action(request.user, 'Disliked an image')
+                    return JsonResponse({'status': "ok"})
+            except Image.DoesNotExist:
+                pass
+        return JsonResponse({"status": "failed"})
 
 @login_required
-def show_images(request): # infinit scroll pagination
+def add_images(request):
+    image = Image.objects.get(id=int(request.GET['image']))
+    return render(request,'images/image/add_liked_user.html',{'image':image})
+
+@login_required
+def show_images(request):  # infinit scroll pagination
     # request.is_secure()
-    print("get---",request.GET)
     images = Image.objects.all()
     all_pages = Paginator(images, 8)
     requested_page_number = request.GET.get('page')
     if not requested_page_number:
         requested_page_number = 1
-    print(requested_page_number," this page was requested")
-    images_only = request.GET.get('images_only')
+    images_only = request.GET.get('images_only') # if it is just about loading new images to the whole
     try:
         images = all_pages.page(requested_page_number)
     except PageNotAnInteger:
@@ -86,7 +98,7 @@ def show_images(request): # infinit scroll pagination
     except EmptyPage:
         if images_only:
             return HttpResponse('')  # returns an empty page if AJAX is used
-        ilikemages = all_pages.page(all_pages.num_pages)  # show the last page
+        images = all_pages.page(all_pages.num_pages)  # show the last page
     if images_only:
         return render(request, "images/image/pics_list.html", context={
             'section': "images",
@@ -97,4 +109,3 @@ def show_images(request): # infinit scroll pagination
         'section': "images",
         'images': images
     })
-

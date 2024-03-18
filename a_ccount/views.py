@@ -43,11 +43,12 @@ def dashboard_view(request):
     # taking out actions
     logged = get_user(request)
     actions = Action.objects.exclude(user_id=logged.id)
+    # relations which this user created by following other users
     following_relations = Relation.objects.filter(From_id=request.user.id)
+    # creating a list of user ids who are being followed by the logged user
     following_users = [rel[2] for rel in following_relations.values_list()]
     if following_users:
         actions.filter(user_id__in= following_users)
-        print(actions)
     actions = actions[:10]
     return render(request, 'account/dashboard.html', {"section": 'dashboard', 'loggedUser': logged,'actions':actions})
 
